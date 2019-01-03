@@ -1,0 +1,39 @@
+version: '3'
+services:
+  web:
+    image: nginx:latest
+    ports:
+    - 80:80/tcp
+    volumes:
+      - ./code:/code
+      - ./code/php:/code/php
+      - ./code/js:/code/js
+      - ./default.conf:/etc/nginx/conf.d/default.conf
+    links:
+      - php
+  php:
+    image: tobi312/rpi-php
+    volumes:
+       - ./code:/code
+       - ./code/php:/code/php
+       - ./code/js:/code/js
+    links:
+      - db
+  db:
+    image: hypriot/rpi-mysql:latest
+    volumes:
+     - dbdata:/var/lib/mysql
+    ports:
+       - "3306"
+    environment:
+      MYSQL_ALLOW_EMPTY_PASSWORD: "yes"
+      MYSQL_USER: "user"
+      MYSQL_PASSWORD: "<set_a_password>"
+      MYSQL_ROOT_PASSWORD: "<set_a_password>"
+      MYSQL_DATABASE: "database"
+volumes:
+  dbdata:
+
+
+
+
